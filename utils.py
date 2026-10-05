@@ -79,7 +79,7 @@ class Whiten2d(Module):
         rTr = (cov * P).sum((1, 2), keepdim=True).reciprocal_()
         cov_N = cov * rTr
         for k in range(self.T):
-            P = torch.baddbmm(1.5, P, -0.5, torch.matrix_power(P, 3), cov_N)
+            P = torch.baddbmm(P, torch.matrix_power(P, 3), cov_N, beta=1.5, alpha=-0.5)
         # whiten matrix: the matrix inverse of covariance, i.e., cov^{-1/2}
         wm = P.mul_(rTr.sqrt())
 
